@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-cream text-ink font-body antialiased;
+    font-feature-settings: 'ss01' 1, 'cv01' 1;
+  }
+  ::selection {
+    background: #556B4F;
+    color: #F8F6F2;
+  }
+  :focus-visible {
+    outline: 2px solid #556B4F;
+    outline-offset: 3px;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+    font-weight: 500;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-widest2 text-olive;
+  }
+  .hairline {
+    @apply border-t border-line;
+  }
+  .container-luxe {
+    @apply max-w-container mx-auto px-6 md:px-10 lg:px-16;
+  }
+  .btn-primary {
+    @apply inline-flex items-center gap-2.5 bg-ink text-cream px-7 py-3.5 rounded-full text-sm font-medium tracking-wide transition-all duration-300 hover:bg-olive-dark;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center gap-2.5 bg-transparent border border-ink/20 text-ink px-7 py-3.5 rounded-full text-sm font-medium tracking-wide transition-all duration-300 hover:border-ink hover:bg-ink hover:text-cream;
+  }
+}
+
+/* custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #F8F6F2;
+}
+::-webkit-scrollbar-thumb {
+  background: #DFDACD;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #556B4F;
+}
