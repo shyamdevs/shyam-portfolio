@@ -18,7 +18,7 @@ const links = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-  const [resumeUrl, setResumeUrl] = useState('/Shyam_Sharma_Resume.pdf') // static fallback
+  const [resumeUrl, setResumeUrl] = useState('/Shyam_S_Sharma_Final_Resume.pdf') // static fallback
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
