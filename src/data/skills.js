@@ -38,7 +38,7 @@ export const skillGroups = [
 
 
 export const staticStats = [
-  { key: 'projects', value: 9, suffix: '+', label: 'Projects Completed' },
-  { key: 'years', value: 2, suffix: '+', label: 'Years Learning' },
-  { key: 'technologies', value: 14, suffix: '', label: 'Technologies' },
+  { key: 'projects', value: 0, suffix: '+', label: 'Projects Completed' },
+  { key: 'years', value: 0, suffix: '+', label: 'Years Learning' },
+  { key: 'technologies', value: 0, suffix: '', label: 'Technologies' },
 ]
