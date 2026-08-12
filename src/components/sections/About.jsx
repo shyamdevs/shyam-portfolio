@@ -1,10 +1,24 @@
+import { useEffect, useState } from 'react'
 import Reveal from '../ui/Reveal.jsx'
 import Magnetic from '../ui/Magnetic.jsx'
 import { FiArrowUpRight } from 'react-icons/fi'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+
 const chips = ['Clean Architecture', 'REST APIs', 'JWT Auth', 'Responsive UI', 'CRUD Systems', 'Git Workflow']
 
 export default function About() {
+  const [aboutImage, setAboutImage] = useState('/about.svg')
+
+  useEffect(() => {
+    fetch(`${API_URL}/settings`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.aboutImage) setAboutImage(data.aboutImage)
+      })
+      .catch(() => {})
+  }, [])
+
   return (
     <section id="about" className="py-28 md:py-36 bg-cream-soft">
       <div className="container-luxe grid lg:grid-cols-2 gap-16 items-center">
@@ -12,10 +26,10 @@ export default function About() {
           <div className="relative">
             <div className="rounded-[32px] overflow-hidden border border-line shadow-glass aspect-[4/5] bg-olive-50">
               <img
-                src="/about.jpeg"
+                src={aboutImage}
                 alt="Shyam Sharma at his desk"
                 loading="lazy"
-                className="w-full h-full object-cover hover:grayscale-0 transition-all duration-700"
+                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
               />
             </div>
             <div className="absolute -bottom-8 -right-6 md:-right-10 bg-ink text-cream rounded-3xl p-6 max-w-[220px] shadow-glass">
@@ -66,7 +80,7 @@ export default function About() {
           <Reveal delay={0.3}>
             <Magnetic className="inline-block mt-10">
               <a href="#contact" data-cursor-hover className="btn-secondary">
-                Let's Connect <FiArrowUpRight />
+                Read More About Me <FiArrowUpRight />
               </a>
             </Magnetic>
           </Reveal>

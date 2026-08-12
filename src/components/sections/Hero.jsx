@@ -5,6 +5,7 @@ import AnimatedCounter from '../ui/AnimatedCounter.jsx'
 // import { stats } from '../../data/skills.js'
 import { usePortfolioStats } from '../../hooks/usePortfolioStats.js'
 import { staticStats } from '../../data/skills.js'
+import { useEffect, useState } from 'react'
 
 const badges = [
   { label: 'React', style: 'top-[6%] -left-2 md:-left-8' },
@@ -13,7 +14,7 @@ const badges = [
 ]
 
 export default function Hero() {
-  
+  const [heroImage, setHeroImage] = useState('/profile.svg')
 const liveCounts = usePortfolioStats()
 
 const stats = staticStats.map((s) => {
@@ -30,7 +31,14 @@ const stats = staticStats.map((s) => {
 })
 
 
-
+useEffect(() => {
+  fetch(`${API_URL}/settings`)
+    .then((r) => r.json())
+    .then((data) => {
+      if (data?.heroImage) setHeroImage(data.heroImage)
+    })
+    .catch(() => {})
+}, [])
 
 
   return (
@@ -121,12 +129,7 @@ const stats = staticStats.map((s) => {
             >
               <div className="absolute -inset-6 rounded-full bg-olive/15 blur-2xl" />
               <div className="relative w-full h-full rounded-full overflow-hidden border border-line shadow-glass bg-olive-50">
-                <img
-                  src="/profile.jpeg"
-                  alt="Portrait of Shyam Sharma"
-                  className="w-full h-full object-cover grayscale"
-                  loading="eager"
-                />
+             <img src={heroImage} alt="Portrait of Shyam Sharma" className="w-full h-full object-cover grayscale" loading="eager" />
               </div>
 
               {badges.map((b, i) => (
