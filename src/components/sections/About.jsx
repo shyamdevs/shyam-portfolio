@@ -29,7 +29,7 @@ export default function About() {
                 src={aboutImage}
                 alt="Shyam Sharma at his desk"
                 loading="lazy"
-                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                className="w-full h-full object-cover  transition-all duration-700"
               />
             </div>
             <div className="absolute -bottom-8 -right-6 md:-right-10 bg-ink text-cream rounded-3xl p-6 max-w-[220px] shadow-glass">

@@ -6,7 +6,7 @@ import AnimatedCounter from '../ui/AnimatedCounter.jsx'
 import { usePortfolioStats } from '../../hooks/usePortfolioStats.js'
 import { staticStats } from '../../data/skills.js'
 import { useEffect, useState } from 'react'
-
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 const badges = [
   { label: 'React', style: 'top-[6%] -left-2 md:-left-8' },
   { label: 'Node.js', style: 'top-[38%] -right-4 md:-right-10' },
@@ -14,31 +14,31 @@ const badges = [
 ]
 
 export default function Hero() {
-  const [heroImage, setHeroImage] = useState('/profile.svg')
-const liveCounts = usePortfolioStats()
+  const [heroImage, setHeroImage] = useState('/profile.jpeg')
+  const liveCounts = usePortfolioStats()
 
-const stats = staticStats.map((s) => {
-  if (s.key === 'projects' && liveCounts.projects !== null) {
-    return { ...s, value: liveCounts.projects }
-  }
-  if (s.key === 'technologies' && liveCounts.technologies !== null) {
-    return { ...s, value: liveCounts.technologies }
-  }
-  if (s.key === 'years' && liveCounts.years) {
-    return { ...s, value: liveCounts.years.value, suffix: liveCounts.years.suffix, label: liveCounts.years.label }
-  }
-  return s
-})
+  const stats = staticStats.map((s) => {
+    if (s.key === 'projects' && liveCounts.projects !== null) {
+      return { ...s, value: liveCounts.projects }
+    }
+    if (s.key === 'technologies' && liveCounts.technologies !== null) {
+      return { ...s, value: liveCounts.technologies }
+    }
+    if (s.key === 'years' && liveCounts.years) {
+      return { ...s, value: liveCounts.years.value, suffix: liveCounts.years.suffix, label: liveCounts.years.label }
+    }
+    return s
+  })
 
 
-useEffect(() => {
-  fetch(`${API_URL}/settings`)
-    .then((r) => r.json())
-    .then((data) => {
-      if (data?.heroImage) setHeroImage(data.heroImage)
-    })
-    .catch(() => {})
-}, [])
+  useEffect(() => {
+    fetch(`${API_URL}/settings`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.heroImage) setHeroImage(data.heroImage)
+      })
+      .catch(() => { })
+  }, [])
 
 
   return (
@@ -129,7 +129,7 @@ useEffect(() => {
             >
               <div className="absolute -inset-6 rounded-full bg-olive/15 blur-2xl" />
               <div className="relative w-full h-full rounded-full overflow-hidden border border-line shadow-glass bg-olive-50">
-             <img src={heroImage} alt="Portrait of Shyam Sharma" className="w-full h-full object-cover grayscale" loading="eager" />
+                <img src={heroImage} alt="Portrait" className="w-full h-full object-cover " loading="eager" />
               </div>
 
               {badges.map((b, i) => (
