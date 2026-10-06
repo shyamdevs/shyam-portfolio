@@ -5,6 +5,14 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  /* `clip` (unlike `hidden`) never creates a scroll container, so nothing can cause sideways scroll */
+  html, body {
+    overflow-x: clip;
+  }
+  section[id] {
+    scroll-margin-top: 3.5rem;
   }
   body {
     @apply bg-cream text-ink font-body antialiased;
@@ -37,6 +45,12 @@
 }
 
 @layer components {
+  /* Loading placeholder: olive-tinted block with a slow sheen (disabled by the reduced-motion rule above) */
+  .skeleton {
+    background: linear-gradient(100deg, #EDE8DE 30%, #F6F3EC 50%, #EDE8DE 70%);
+    background-size: 220% 100%;
+    animation: skeleton-sheen 1.8s ease-in-out infinite;
+  }
   .eyebrow {
     @apply font-mono text-[11px] uppercase tracking-widest2 text-olive;
   }
@@ -67,4 +81,9 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #556B4F;
+}
+
+@keyframes skeleton-sheen {
+  from { background-position: 120% 0; }
+  to { background-position: -120% 0; }
 }

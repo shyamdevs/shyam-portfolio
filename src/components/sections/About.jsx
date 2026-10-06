@@ -1,42 +1,53 @@
-import { useEffect, useState } from 'react'
+import { useRef } from 'react'
+import { motion, useScroll } from 'framer-motion'
+import { FiArrowUpRight } from 'react-icons/fi'
 import Reveal from '../ui/Reveal.jsx'
 import Magnetic from '../ui/Magnetic.jsx'
-import { FiArrowUpRight } from 'react-icons/fi'
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+import ResponsiveImage from '../ui/ResponsiveImage.jsx'
+import { useMotionPrefs } from '../../hooks/useMotionPrefs.js'
+import { useParallax } from '../../hooks/useParallax.js'
+import { usePortfolio } from '../../lib/portfolioStore.js'
 
 const chips = ['Clean Architecture', 'REST APIs', 'JWT Auth', 'Responsive UI', 'CRUD Systems', 'Git Workflow']
 
 export default function About() {
-  const [aboutImage, setAboutImage] = useState('/about.svg')
+  const ref = useRef(null)
+  const { depth } = useMotionPrefs()
+  const { data, status } = usePortfolio()
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
 
-  useEffect(() => {
-    fetch(`${API_URL}/settings`)
-      .then((r) => r.json())
-      .then((data) => {
-        if (data?.aboutImage) setAboutImage(data.aboutImage)
-      })
-      .catch(() => {})
-  }, [])
+  // photo drifts slower than the page, the quote block faster: two layers, one scene
+  const photoY = useParallax(scrollYProgress, 40, depth)
+  const quoteY = useParallax(scrollYProgress, -50, depth)
+
+  // no flash of the static fallback: wait for the real image URL (or a failed request)
+  const src = data ? data.settings?.aboutImage || '/about.svg' : status === 'error' ? '/about.svg' : ''
 
   return (
-    <section id="about" className="py-28 md:py-36 bg-cream-soft">
-      <div className="container-luxe grid lg:grid-cols-2 gap-16 items-center">
+    <section ref={ref} id="about" className="bg-cream-soft py-24 md:py-36">
+      <div className="container-luxe grid items-center gap-16 lg:grid-cols-2">
         <Reveal>
-          <div className="relative">
-            <div className="rounded-[32px] overflow-hidden border border-line shadow-glass aspect-[4/5] bg-olive-50">
-              <img
-                src={aboutImage}
-                alt="Shyam Sharma at his desk"
-                loading="lazy"
-                className="w-full h-full object-cover  transition-all duration-700"
-              />
+          <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+            <div className="aspect-[4/5] overflow-hidden rounded-[24px] border border-line bg-olive-50 shadow-glass">
+              <motion.div style={{ y: photoY, scale: 1.1 }} className="h-full w-full">
+                {src && (
+                  <ResponsiveImage
+                    src={src}
+                    fallback="/about.jpeg"
+                    alt="Shyam Sharma at his desk"
+                    ratio={4 / 5}
+                    widths={[400, 640, 880]}
+                    sizes="(min-width:1024px) 40vw, 90vw"
+                  />
+                )}
+              </motion.div>
             </div>
-            <div className="absolute -bottom-8 -right-6 md:-right-10 bg-ink text-cream rounded-3xl p-6 max-w-[220px] shadow-glass">
-              <p className="font-display italic text-lg leading-snug">
-                "Consistency compounds. Keep building."
-              </p>
-            </div>
+            <motion.figure
+              style={{ y: quoteY }}
+              className="absolute -bottom-8 right-2 max-w-[200px] rounded-2xl bg-ink p-5 text-cream shadow-glass sm:p-6 md:-right-10 md:max-w-[220px]"
+            >
+              <blockquote className="font-display text-lg italic leading-snug">“Consistency compounds. Keep building.”</blockquote>
+            </motion.figure>
           </div>
         </Reveal>
 
@@ -45,40 +56,38 @@ export default function About() {
             <p className="eyebrow mb-4">About Me</p>
           </Reveal>
           <Reveal delay={0.08}>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-tightest leading-[1.05] text-ink mb-7">
+            <h2 className="mb-7 text-4xl leading-[1.05] tracking-tightest text-ink md:text-5xl lg:text-6xl">
               A curious developer who loves to build.
             </h2>
           </Reveal>
           <Reveal delay={0.16}>
-            <div className="space-y-5 text-ink-faint text-lg leading-relaxed max-w-xl">
+            <div className="max-w-xl space-y-5 text-lg leading-relaxed text-ink-faint">
               <p>
-                I enjoy turning ideas into real-world applications — currently focused on
-                building scalable, full-stack products with clean, efficient code.
+                I enjoy turning ideas into real-world applications — currently focused on building scalable,
+                full-stack products with clean, efficient code.
               </p>
               <p>
-                Based in Jaipur, I work across the MERN stack, from designing REST APIs
-                and database schemas to shipping polished, responsive interfaces that
-                people actually enjoy using.
+                Based in Jaipur, I work across the MERN stack, from designing REST APIs and database schemas to
+                shipping polished, responsive interfaces that people actually enjoy using.
               </p>
             </div>
           </Reveal>
 
           <Reveal delay={0.24}>
-            <div className="flex flex-wrap gap-3 mt-9">
-              {chips.map((c, i) => (
-                <span
+            <ul className="mt-9 flex flex-wrap gap-3">
+              {chips.map((c) => (
+                <li
                   key={c}
-                  className="text-xs font-mono px-4 py-2 rounded-full border border-line text-ink-soft hover:border-olive hover:text-olive transition-colors duration-300"
-                  style={{ transitionDelay: `${i * 30}ms` }}
+                  className="rounded-full border border-line px-4 py-2 font-mono text-xs text-ink-soft transition-colors duration-300 hover:border-olive hover:text-olive"
                 >
                   {c}
-                </span>
+                </li>
               ))}
-            </div>
+            </ul>
           </Reveal>
 
           <Reveal delay={0.3}>
-            <Magnetic className="inline-block mt-10">
+            <Magnetic className="mt-10 inline-block">
               <a href="#contact" data-cursor-hover className="btn-secondary">
                 Read More About Me <FiArrowUpRight />
               </a>

@@ -1,42 +1,4 @@
-import {
-  SiJavascript, SiReact, SiNodedotjs, SiExpress, SiMongodb, SiHtml5,
-  SiCss, SiTailwindcss, SiGit, SiGithub, SiPostman, SiVercel, SiJsonwebtokens,
-} from 'react-icons/si'
-import { VscVscode } from 'react-icons/vsc'
-
-export const skillGroups = [
-  {
-    label: 'Frontend',
-    skills: [
-      { name: 'JavaScript (ES6+)', icon: SiJavascript },
-      { name: 'React.js', icon: SiReact },
-      { name: 'HTML5', icon: SiHtml5 },
-      { name: 'CSS3', icon: SiCss },
-      { name: 'Tailwind CSS', icon: SiTailwindcss },
-    ],
-  },
-  {
-    label: 'Backend',
-    skills: [
-      { name: 'Node.js', icon: SiNodedotjs },
-      { name: 'Express.js', icon: SiExpress },
-      { name: 'MongoDB', icon: SiMongodb },
-      { name: 'JWT Auth', icon: SiJsonwebtokens },
-    ],
-  },
-  {
-    label: 'Tools',
-    skills: [
-      { name: 'Git', icon: SiGit },
-      { name: 'GitHub', icon: SiGithub },
-      { name: 'Postman', icon: SiPostman },
-      { name: 'VS Code', icon: VscVscode },
-      { name: 'Vercel', icon: SiVercel },
-    ],
-  },
-]
-
-
+// Labels for the hero stat row. Values are always derived from live API data.
 export const staticStats = [
   { key: 'projects', value: 0, suffix: '+', label: 'Projects Completed' },
   { key: 'years', value: 0, suffix: '+', label: 'Years Learning' },

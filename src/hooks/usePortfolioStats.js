@@ -1,26 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
+import { usePortfolio } from '../lib/portfolioStore.js'
 import { getLearningDuration } from '../utils/duration.js'
+import { staticStats } from '../data/skills.js'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
-
+// Hero stats are derived from the shared portfolio data — no extra requests.
+// Returns null until real data exists, so nothing fake is ever shown.
 export function usePortfolioStats() {
-  const [counts, setCounts] = useState({ projects: null, technologies: null, years: null })
-
-  useEffect(() => {
-    Promise.all([
-      fetch(`${API_URL}/projects`).then((r) => r.json()),
-      fetch(`${API_URL}/skills`).then((r) => r.json()),
-      fetch(`${API_URL}/experience`).then((r) => r.json()),
-    ])
-      .then(([projects, skills, experience]) => {
-        setCounts({
-          projects: projects.length,
-          technologies: skills.length,
-          years: getLearningDuration(experience),
-        })
-      })
-      .catch(() => {})
-  }, [])
-
-  return counts
+  const { data } = usePortfolio()
+  return useMemo(() => {
+    if (!data) return null
+    const years = getLearningDuration(data.experience)
+    return staticStats.map((s) => {
+      if (s.key === 'projects') return { ...s, value: data.projects.length }
+      if (s.key === 'technologies') return { ...s, value: data.skills.length }
+      if (s.key === 'years' && years) return { ...s, ...years }
+      return s
+    })
+  }, [data])
 }

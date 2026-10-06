@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { FiArrowUpRight, FiCheck } from 'react-icons/fi'
 import Magnetic from './Magnetic.jsx'
+import { apiFetch } from '../../lib/api.js'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 
 const fields = [
   { name: 'name', label: 'Name', type: 'text' },
@@ -20,12 +20,7 @@ export default function ContactForm() {
     e.preventDefault()
     setStatus('sending')
     try {
-      const res = await fetch(`${API_URL}/messages`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      })
-      if (!res.ok) throw new Error('Request failed')
+      await apiFetch('/messages', { method: 'POST', body: form })
       setStatus('sent')
       setForm({ name: '', email: '', subject: '', message: '' })
     } catch (err) {
@@ -36,7 +31,7 @@ export default function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="relative rounded-[32px] p-8 md:p-10 bg-white/40 backdrop-blur-xl border border-white/60 shadow-glass"
+      className="relative rounded-[24px] p-6 sm:p-8 md:p-10 bg-white/50 border border-line shadow-glass"
     >
       <div className="grid sm:grid-cols-2 gap-5 mb-5">
         {fields.map((f) => (
@@ -46,6 +41,7 @@ export default function ContactForm() {
               id={f.name}
               name={f.name}
               type={f.type}
+              autoComplete={f.name}
               required
               value={form[f.name]}
               onChange={handleChange}
@@ -102,12 +98,12 @@ export default function ContactForm() {
       </Magnetic>
 
       {status === 'error' && (
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 text-sm text-red-700">
+        <motion.p role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 text-sm text-red-700">
           Something went wrong — please try again, or email me directly.
         </motion.p>
       )}
       {status === 'sent' && (
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 text-sm text-olive-dark">
+        <motion.p role="status" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 text-sm text-olive-dark">
           Thanks — I'll get back to you shortly.
         </motion.p>
       )}

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://shyam-portfolio-self.vercel.app/sitemap.xml

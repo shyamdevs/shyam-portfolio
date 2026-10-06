@@ -4,7 +4,10 @@ export default function SectionHeading({ eyebrow, title, description, align = 'l
   return (
     <div className={align === 'center' ? 'text-center mx-auto max-w-2xl' : ''}>
       <Reveal>
-        <p className="eyebrow mb-4">{eyebrow}</p>
+        <p className="eyebrow mb-4 flex items-center gap-3">
+          <span aria-hidden="true" className="h-px w-8 bg-olive/60" />
+          {eyebrow}
+        </p>
       </Reveal>
       <Reveal delay={0.08}>
         <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-tightest leading-[1.05] text-ink">
